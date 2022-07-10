@@ -604,6 +604,43 @@ Resources:
                 CognitoUserPoolClient: !GetAtt CognitoIdentityPool.Outputs.CognitoUserPoolClientId
                 Timestamp: 1649448888
 
+Rules:
+    LexVersionCheck:
+        Assertions:
+            - Assert:
+                'Fn::Or':
+                    - 'Fn::And':
+                        - 'Fn::Not':
+                            - 'Fn::Equals':
+                                - !Ref BotName
+                                - ''
+                        - 'Fn::Not':
+                            - 'Fn::Equals':
+                                - !Ref BotAlias
+                                - ''
+                        - 'Fn::Equals':
+                            - !Ref LexV2BotId
+                            - ''
+                        - 'Fn::Equals':
+                            - !Ref LexV2BotAliasId
+                            - ''
+                    - 'Fn::And':
+                        - 'Fn::Not':
+                            - 'Fn::Equals':
+                                - !Ref LexV2BotAliasId
+                                - ''
+                        - 'Fn::Not':
+                            - 'Fn::Equals':
+                                - !Ref LexV2BotId
+                                - ''
+                        - 'Fn::Equals':
+                            - !Ref BotAlias
+                            - ''
+                        - 'Fn::Equals':
+                            - !Ref BotName
+                            - ''
+                AssertDescription: 'Only specify a Lex V1 or Lex V2 bot, not both.'
+
 Outputs:
     BotName:
         Condition: NeedsBot
